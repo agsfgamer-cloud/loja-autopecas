@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loja Autopeças Santarém - Sua peça em um clique</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; user-select: none; }
+        [x-cloak] { display: none !important; }
+        .bg-premium { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+        .accent-amber { color: #f59e0b; }
+        .category-nav { background-color: #1e293b; border-bottom: 2px solid #f59e0b; transition: all 0.3s; }
+        .category-pill { background-color: #334155; color: #f1f5f9; flex-shrink: 0; font-weight: 700; font-size: 11px; text-transform: uppercase; }
+        .category-pill.active { background-color: #f59e0b; color: #0f172a; transform: scale(1.05); }
+        .product-title { min-height: 2.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+
+<body class="bg-[#f8fafc] min-h-screen text-slate-800 pb-10"
+      x-data="lojaApp()"
+      x-init="init()"
+      @scroll.window="scrolled = (window.pageYOffset > 60)">
+
+<main class="container mx-auto px-4 py-6">
+
+    <div x-show="!carregando" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <template x-for="produto in produtosFiltrados" :key="produto.SKU">
+            <div class="bg-white rounded-xl p-4 shadow">
+                <img :src="produto.Imagem" class="w-full h-32 object-contain mb-2">
+                <h2 class="text-sm font-bold product-title" x-text="produto.Nome"></h2>
+                <p class="text-xs text-gray-400" x-text="'Ref: ' + produto.SKU"></p>
+                <p class="font-bold mt-2">
+                    R$ <span x-text="parseFloat(produto.Preco).toLocaleString('pt-br', {minimumFractionDigits: 2})"></span>
+                </p>
+                <button @click="adicionarAoCarrinho(produto)"
+                        class="mt-3 w-full bg-slate-900 text-white py-2 rounded">
+                    Adicionar
+                </button>
+            </div>
+        </template>
+    </div>
+
+    <div x-show="carregando" class="text-center py-20">
+        Carregando produtos...
+    </div>
+
+</main>
+
+<script>
+function lojaApp() {
+    return {
+        scrolled: false,
+        carregando: true,
+        produtos: [],
+        carrinho: [],
+        categoriaAtiva: 'TODAS',
+
+        async init() {
+            try {
+                const response = await fetch("http://localhost:3000/produtos");
+                const data = await response.json();
+
+                this.produtos = data.filter(p => p.Nome && p.Nome.trim() !== "");
+                this.carregando = false;
+
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+                this.carregando = false;
+            }
+        },
+
+        get produtosFiltrados() {
+            return this.produtos;
+        },
+
+        adicionarAoCarrinho(p) {
+            alert("Produto adicionado: " + p.Nome);
+        }
+    }
+}
+</script>
+
+</body>
+</html>

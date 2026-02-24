@@ -1,0 +1,24 @@
+[
+  {
+    "Nome": "Filtro de Óleo",
+    "SKU": "FO123",
+    "Preco": "45.00",
+    "Categoria": "FILTROS",
+    "Estoque": "10",
+    "Imagem": "https://via.placeholder.com/400",
+    "Imagem2": "",
+    "Imagem3": "",
+    "Detalhes": "Filtro de óleo original alta qualidade."
+  },
+  {
+    "Nome": "Pastilha de Freio",
+    "SKU": "PF456",
+    "Preco": "120.00",
+    "Categoria": "FREIOS",
+    "Estoque": "5",
+    "Imagem": "https://via.placeholder.com/400",
+    "Imagem2": "",
+    "Imagem3": "",
+    "Detalhes": "Pastilha de freio dianteira."
+  }
+]
