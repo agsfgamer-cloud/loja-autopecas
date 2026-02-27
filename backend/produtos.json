@@ -1,24 +1,24 @@
-[
-  {
-    "Nome": "Filtro de Óleo",
-    "SKU": "FO123",
-    "Preco": "45.00",
-    "Categoria": "FILTROS",
-    "Estoque": "10",
-    "Imagem": "https://via.placeholder.com/400",
-    "Imagem2": "",
-    "Imagem3": "",
-    "Detalhes": "Filtro de óleo original alta qualidade."
-  },
-  {
-    "Nome": "Pastilha de Freio",
-    "SKU": "PF456",
-    "Preco": "120.00",
-    "Categoria": "FREIOS",
-    "Estoque": "5",
-    "Imagem": "https://via.placeholder.com/400",
-    "Imagem2": "",
-    "Imagem3": "",
-    "Detalhes": "Pastilha de freio dianteira."
+app.get("/produtos", async (req, res) => {
+  try {
+    // Se já tiver cache válido, retorna ele
+    if (Date.now() - ultimaAtualizacao < TEMPO_CACHE && cacheProdutos.length > 0) {
+      return res.json(cacheProdutos);
+    }
+    // Se não, busca da planilha
+    const response = await axios.get(SHEET_URL);
+    const results = [];
+    const stream = Readable.from(response.data);
+
+    stream
+      .pipe(csv())
+      .on("data", (data) => results.push(data))
+      .on("end", () => {
+        cacheProdutos = results;
+        ultimaAtualizacao = Date.now();
+        res.json(results);
+    });
+  } catch (error) {
+    res.status(500).json({ erro: "Erro ao carregar produtos"
+    });
   }
-]
+});
