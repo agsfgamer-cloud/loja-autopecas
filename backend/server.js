@@ -10,22 +10,22 @@ const app = express();
 // 🔐 CORS SEGURO E FUNCIONAL
 // =============================
 const allowedOrigins = [
+  "https://lojaautopecasemsantarem.netlify.app",
   "http://127.0.0.1:5500",
-  "http://localhost:3000",
-  "https://lojaautopecasemsantarem.netlify.app"
+  "http://localhost:3000"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
 
-    // Permite requisição sem origin (Render, Postman etc)
+    // Permite acesso direto pelo navegador
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
 
-    return callback(new Error("Acesso negado por CORS"));
+    return callback(new Error("CORS bloqueado"));
   }
 }));
 
@@ -80,3 +80,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
