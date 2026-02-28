@@ -1,24 +1,35 @@
-app.get("/produtos", async (req, res) => {
-  try {
-    // Se já tiver cache válido, retorna ele
-    if (Date.now() - ultimaAtualizacao < TEMPO_CACHE && cacheProdutos.length > 0) {
-      return res.json(cacheProdutos);
-    }
-    // Se não, busca da planilha
-    const response = await axios.get(SHEET_URL);
-    const results = [];
-    const stream = Readable.from(response.data);
-
-    stream
-      .pipe(csv())
-      .on("data", (data) => results.push(data))
-      .on("end", () => {
-        cacheProdutos = results;
-        ultimaAtualizacao = Date.now();
-        res.json(results);
-    });
-  } catch (error) {
-    res.status(500).json({ erro: "Erro ao carregar produtos"
-    });
+[
+  {
+    "Nome": "Filtro de Óleo",
+    "Categoria": "Motor",
+    "SKU": "FO123",
+    "Preco": "35.90",
+    "Detalhes": "Filtro de óleo original para motores 1.0 e 1.4",
+    "Imagem": "https://via.placeholder.com/300",
+    "Imagem2": "",
+    "Imagem3": "",
+    "Estoque": "10"
+  },
+  {
+    "Nome": "Pastilha de Freio",
+    "Categoria": "Freios",
+    "SKU": "PF456",
+    "Preco": "89.90",
+    "Detalhes": "Pastilha dianteira alta durabilidade",
+    "Imagem": "https://via.placeholder.com/300",
+    "Imagem2": "",
+    "Imagem3": "",
+    "Estoque": "5"
+  },
+  {
+    "Nome": "Bateria 60Ah",
+    "Categoria": "Elétrica",
+    "SKU": "BT789",
+    "Preco": "450.00",
+    "Detalhes": "Bateria automotiva 60 amperes",
+    "Imagem": "https://via.placeholder.com/300",
+    "Imagem2": "",
+    "Imagem3": "",
+    "Estoque": "3"
   }
-});
+]
